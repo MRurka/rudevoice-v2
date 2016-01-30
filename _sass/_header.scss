@@ -6,10 +6,17 @@ header {
 	background: $main-header-bg;
 	.logo { 
 		float:left;
-		img {
-			width: 40px;
-			height: auto;
-			margin: .45em 0 0 0;
+		height:6em;
+		width:6em;
+		svg {
+			width:100%;
+			height:auto;
+			fill: $c-main;
+			width:100%;
+			transition:all .5s ease-in-out;
+			&:hover {
+				fill:$c-accent;
+			}
 		}
 	}
 	h1 {
@@ -36,9 +43,15 @@ header {
 	top: 2.5em;
 	border:none;
 	padding: 5px;
-
-	img {
-		width:30px;
+	width:36px;
+	svg {
+		width:100%;
+		height:auto;
+		fill: $c-main;
+		transition:all .5s ease-in-out;
+		&:hover {
+			fill:$c-accent;
+		}
 	}
 }
 

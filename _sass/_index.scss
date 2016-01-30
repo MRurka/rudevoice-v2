@@ -9,7 +9,7 @@
 			text-align: right;
 		}
 	}
-
+	// Table Labels
 	.table-header-container {
 		width: 100%;
 		padding: 1.35em 0 1em 0;
@@ -17,29 +17,32 @@
 		th {
 			font-size: .6em;
 			color: #fff;
+			cursor: default;
 			text-transform: uppercase;
 			letter-spacing: 3px;
 			font-weight: 500;
 			color: $index-table-header-color;
 		}
 	}
+	// Table Summary
 	tr.table-summary-header {
-		padding: 0 0 1em 0;
-		border-bottom:1px solid $index-table-border-color;
+		padding: 0 0 1.5em 0;
+		border-bottom:2px solid $index-table-border-color;
 		th {
 			padding-top:4em;
 			font-size:.9em;
-			padding:6em 0 .5em 0;
+			padding:4.5em 0 1em 0;
 			font-weight: 100;
 			color: $index-table-summary-color;
 		}
 	}
+	// Table Data
 	tr.table-invoice-item {
 		td {
 			font-size:.9em;
 			letter-spacing: .5px;
 			line-height: 1.6em;
-			padding:1em 0 0 0;
+			padding:.6em 0 0 0;
 			color: $index-table-data-color;
 		}
 	}
