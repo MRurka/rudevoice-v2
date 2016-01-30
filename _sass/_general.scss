@@ -1,0 +1,29 @@
+
+body {
+	font-family: $base-font-family;
+	color: $body-text-color;
+	background-color: $body-bg;
+	font-weight: $base-font-weight;
+	width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+a {
+	color:$body-link-color;
+	text-decoration: none;
+	cursor:pointer;
+	transition: all .3s ease;
+
+	&:hover {
+		color:$body-link-color-hover;
+	}
+}
+.container {
+	max-width:1250px;
+	width:90%;
+	margin:0 auto;
+}
+table {
+	width:100%;
+}

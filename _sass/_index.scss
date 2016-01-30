@@ -1,0 +1,54 @@
+
+.index-template {
+	padding:0 0 5em 0;
+
+	// Text Alignment
+	th, td {
+		text-align: left;
+		&.text-right {
+			text-align: right;
+		}
+	}
+
+	.table-header-container {
+		width: 100%;
+		padding: 1.35em 0 1em 0;
+		background: $index-table-header-bg;
+		th {
+			font-size: .6em;
+			color: #fff;
+			text-transform: uppercase;
+			letter-spacing: 3px;
+			font-weight: 500;
+			color: $index-table-header-color;
+		}
+	}
+	tr.table-summary-header {
+		padding: 0 0 1em 0;
+		border-bottom:1px solid $index-table-border-color;
+		th {
+			padding-top:4em;
+			font-size:.9em;
+			padding:6em 0 .5em 0;
+			font-weight: 100;
+			color: $index-table-summary-color;
+		}
+	}
+	tr.table-invoice-item {
+		td {
+			font-size:.9em;
+			letter-spacing: .5px;
+			line-height: 1.6em;
+			padding:1em 0 0 0;
+			color: $index-table-data-color;
+		}
+	}
+}
+
+// Hide Template File from Index
+tr.hide-template-file {
+	display: none;
+}
+
+
+

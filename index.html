@@ -1,0 +1,152 @@
+---
+layout: default
+---
+
+<div class="index-template">
+
+    {% capture tags %}
+        {% for tag in site.tags reversed %}
+            {{ tag[0] }}
+        {% endfor %}
+    {% endcapture %}
+    {% assign sortedtags = tags | split:' ' | sort: 'date' %}
+
+    <div class="table-header-container">
+        <div class="container">
+            <table>
+                <tr>
+                    <th width="10%">Date</th>
+                    <th width="10%">Client</th>
+                    <th width="26%">Work</th>
+                    <th width="14%">Invoice #</th>
+                    <th width="10%">Subtotal</th>
+                    <th width="10%">Tax</th>
+                    <th width="10%">Total</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="table-body-container">
+        <div class="container">
+            <table>
+                {% for tag in sortedtags %}
+                    <tr class="table-summary-header">
+                        <th class="date" width="10%" style="text-align:left">{{ tag }}</th>
+                        <th class="client" width="10%"></th>
+                        <th class="title" width="26%"></th>
+                        <th class="invoice text-right" width="14%"></th>
+                        <th class="subtotal text-right" width="10%">$ <span id="summary-sub-total-{{ tag }}"></span></th>
+                        <th class="tax text-right" width="10%">$ <span id="summary-tax-total-{{ tag }}"></span></th>
+                        <th class="total text-right" width="10%">$ <span id="summary-grand-total-{{ tag }}"></span></th>
+                    </tr>
+                    {% for post in site.tags[tag] %} 
+                        <tr class="table-invoice-item client client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }} {% if post.title == "template" %} hide-template-file {% endif %}">
+                            <td class="date" width="10%">{{ post.date | date: "%b %-d, %Y" }}</td>
+                            <td class="client" width="10%"><a class="client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}">{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.name }}</a></td>
+                            <td class="title" width="26%"><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></td>
+                            <td class="invoice text-right" width="14%"><a onclick="printPage('{{ post.url | prepend: site.baseurl }}');">{{ post.project-id }}-{{ post.date | date: "%m%d%y"}}</a></td>
+                            <td class="subtotal text-right" width="10%">$<span id="sub-total-{{ post.project-id }}"></span></td>
+                            <td class="tax text-right" width="10%">{% if post.tax %}${% else %}-{% endif %}<span id="tax-total-{{ post.project-id }}"></span></td>
+                            <td class="total text-right" width="10%">$<span id="grand-total-{{ post.project-id }}"></span></td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>     
+
+    {% for tag in sortedtags %}
+        {% for post in site.tags[tag] %}
+            <script>
+                // Logic
+                var estimateTotal = 
+                    {% if post.amount-received %}
+                        {{ post.amount-received }} + 
+                    {% else %} 
+                        {{ post.estimate-total }} +
+                    {% endif %} 0 
+                ;
+                var tax = {% if post.tax %} + {{ post.tax }} {% else %} 0 {% endif %};
+
+                // Values
+                var sub_total = estimateTotal;
+                var tax_total =  ( sub_total * tax );
+                var grand_total = ( sub_total * (1 + tax) );
+
+                // HTML Insert
+                document.getElementById('sub-total-{{ post.project-id }}').innerHTML = sub_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});
+                {% if post.tax %}document.getElementById('tax-total-{{ post.project-id }}').innerHTML = tax_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});{% endif %}
+                document.getElementById('grand-total-{{ post.project-id }}').innerHTML = grand_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});
+            </script>
+        {% endfor %}
+    {% endfor %}
+
+    {% for tag in sortedtags %}
+        <script>
+            // Logic
+            var summary_sub_total = 
+            {% for post in site.tags[tag] %}
+                {% if post.amount-received %}
+                    {{ post.amount-received }} +
+                {% else %}
+                    {{ post.estimate-total }} + 
+                {% endif %}
+            {% endfor %} 0
+
+            // Values
+            var summary_tax_total =  ( (
+                    {% for post in site.tags[tag] %}
+                        {% if post.tax %}
+                            {% if post.amount-received %}
+                                {{ post.amount-received }} +
+                            {% else %}
+                                {{ post.estimate-total }} + 
+                            {% endif %}
+                        {% endif %} 
+                    {% endfor %} 0 
+                ) * tax
+            );
+            var summary_grand_total = (
+                {% for post in site.tags[tag] %}
+                    {% if post.tax %}
+                        ( {{ post.amount-received }} * (1 + {{ 0.13 }}) ) +
+                    {% else %}
+                        {{ post.amount-received }} +
+                    {% endif %} 
+                {% endfor %} 0 
+            );
+
+            // HTML Insert
+            document.getElementById('summary-sub-total-{{ tag }}').innerHTML = summary_sub_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('summary-tax-total-{{ tag }}').innerHTML = summary_tax_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('summary-grand-total-{{ tag }}').innerHTML = summary_grand_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});
+        </script>
+    {% endfor %} 
+
+
+</div>
+<script>
+// Toggle Clients
+    {% for tag in sortedtags %}
+        {% for post in site.tags[tag] %} 
+
+            $('.table-body-container table td a.client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}').click(function(){
+                $('.table-body-container table tr.client').hide();
+                $('.table-body-container table tr.client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}').show();
+                $('.table-body-container table td a.client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}').addClass('active');
+            });
+
+            // $('.table-body table td a.client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}.active').click(function(){
+            //     $('.table-body table tr.client').show();
+            // });
+
+        {% endfor %}
+    {% endfor %}
+</script>
+
+
+
+
+
+

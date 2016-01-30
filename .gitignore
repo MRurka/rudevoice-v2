@@ -1,0 +1,7 @@
+_data/
+_site/
+_config.yml
+*.scssc
+_posts/
+signatures/
+_includes/
