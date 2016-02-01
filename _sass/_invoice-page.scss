@@ -216,26 +216,27 @@
 		float:left;
 	}
 
-	div#win {
-		font-size: .8em;
-		text-align: right;
-		line-height: 1.6em;
-		color: #FF7A91;
-		font-weight: 300;
-		margin: 100px 0 0 0;
-		position: absolute;
-		right: 30px;
-		letter-spacing: .5px;
-	}
-	div#win:before {
-	    content: "";
-	    position: absolute;
-	    height: 116px;
-	    top: -82px;
-	    width: 7px;
-	    background: #FF7A91;
-	    right: -28px;
-	}
+	// div#win {
+	// 	font-size: .8em;
+	// 	text-align: right;
+	// 	line-height: 1.6em;
+	// 	color: $print-page-accent-color;
+	// 	font-weight: 300;
+	// 	margin: 100px 0 0 0;
+	// 	position: absolute;
+	// 	right: 30px;
+	// 	letter-spacing: .5px;
+	// }
+	// div#win:before {
+	//     content: "";
+	//     position: absolute;
+	//     height: 116px;
+	//     top: -82px;
+	//     width: 7px;
+	//     background: $print-page-accent-color;
+	//     right: -28px;
+	// }
+	
     .right-col {
     	float:right;
 		width:calc(50% - 40px);
@@ -291,7 +292,7 @@
 		float:left;
 
 		svg {
-			fill:#FF7A91;
+			fill:$print-page-accent-color;
 		}
 	}
 }
@@ -315,7 +316,7 @@
 		    font-size: 1.6em;
 		    font-weight: 200;
 		    letter-spacing: 1px;
-		    background:#FF7A91;
+		    background:$print-page-accent-color;
 		    color:#fff;
 		    padding:4px 0 4px 90px;
 		    width:325px;
@@ -333,7 +334,7 @@
 
 	h2 {
 	    margin: 35px 0 12px 0;
-	    color: #FF7A91;
+	    color: $print-page-accent-color;
 	    font-weight: 300;
 	    font-size: 1.2em;
 	}

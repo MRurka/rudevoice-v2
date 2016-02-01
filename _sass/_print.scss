@@ -25,7 +25,6 @@ body {
     min-height: 297mm;
     padding: 20mm;
     margin: 10mm auto;
-    // border: 1px #D3D3D3 solid;
     border-radius: 5px;
     background: white;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -34,6 +33,10 @@ body {
 .subpage {
     height: 257mm;
     position: relative;
+    p {
+        color:#555 !important;
+        font-weight: 400;
+    }
 }
 
 @page {
