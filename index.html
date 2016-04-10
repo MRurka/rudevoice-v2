@@ -53,7 +53,7 @@ layout: default
                             <td class="col-5 text-right invoice"><a onclick="printPage('{{ post.url | prepend: site.baseurl }}');">{{ post.project-id }}-{{ post.date | date: "%m%d%y"}}</a></td>
                             <td class="col-6 text-right rph"><span id="rph-{{ post.project-id }}"></span></td>
                             <td class="col-7 text-right subtotal">{%if post.revenue == null %} - {% endif %}<span id="sub-total-{{ post.project-id }}"></span></td>
-                            <td class="col-8 text-right tax">{%if post.tax == null %} - {% endif %}<span id="tax-total-{{ post.project-id }}"></span></td>
+                            <td class="col-8 text-right tax">{%if post.tax == null or post.revenue == null %} - {% endif %}<span id="tax-total-{{ post.project-id }}"></span></td>
                             <td class="col-9 text-right total">{%if post.revenue == null %} - {% endif %}<span id="grand-total-{{ post.project-id }}"></span></td>
                         </tr>
                     {% endfor %}
@@ -92,9 +92,9 @@ layout: default
                 var grand_total = ( sub_total * (1 + tax) );
 
                 // HTML Insert
-                {% if post.revenue %}   document.getElementById('sub-total-{{ post.project-id }}').innerHTML = sub_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});{% endif %}
-                {% if post.tax %}       document.getElementById('tax-total-{{ post.project-id }}').innerHTML = tax_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});{% endif %}
-                {% if post.revenue %}   document.getElementById('grand-total-{{ post.project-id }}').innerHTML = grand_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});{% endif %}
+                {% if post.revenue %} document.getElementById('sub-total-{{ post.project-id }}').innerHTML = sub_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});{% endif %}
+                {% if post.revenue and post.tax %} document.getElementById('tax-total-{{ post.project-id }}').innerHTML = tax_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});{% endif %}
+                {% if post.revenue %} document.getElementById('grand-total-{{ post.project-id }}').innerHTML = grand_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});{% endif %}
             </script>
         {% endfor %}
     {% endfor %}
