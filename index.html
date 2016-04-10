@@ -104,35 +104,29 @@ layout: default
             // Header Summary Totals (All)
             // Logic
             var summary_sub_total = 
-            {% for post in site.tags[tag] %}
-                {% if post.revenue %}
-                    {{ post.revenue }} +
-                {% else %}
-                    {{ post.estimate-total }} + 
-                {% endif %}
-            {% endfor %} 0;
+                {% for post in site.tags[tag] %} 
+                    {% if post.revenue %}
+                        {{ post.revenue }} + 
+                    {% else %}
+                        0 +
+                    {% endif %}
+                {% endfor %} 0;
 
             // Values 
             var summary_tax_total =  ( 
                 (
                     {% for post in site.tags[tag] %}
-                        {% if post.tax %}
-                            {% if post.revenue %}
-                                {{ post.revenue }} +
-                            {% else %}
-                                {{ post.estimate-total }} + 
-                            {% endif %}
+                        {% if post.tax and post.revenue %}
+                            {{ post.revenue }} + 
+                        {% else %}
+                            0 +
                         {% endif %} 
-                    {% endfor %} 0 
+                    {% endfor %} 0
                 ) * tax
             );
             var summary_grand_total = (
                 {% for post in site.tags[tag] %}
-                    {% if post.tax %}
-                        ( {{ post.revenue }} * (1 + {{ 0.13 }}) ) +
-                    {% else %}
-                        {{ post.revenue }} +
-                    {% endif %} 
+                    ( {% if post.revenue %} {{ post.revenue }} {% else %} 0 {% endif %} {% if post.tax %} * (1 + {{ post.tax }}) {% else %} {% endif %} ) +
                 {% endfor %} 0
             );
 
