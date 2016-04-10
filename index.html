@@ -40,9 +40,9 @@ layout: default
                         <th class="col-4 title"></th>
                         <th class="col-5 text-right invoice"></th>
                         <th class="col-6 text-right rph"></th>
-                        <th class="col-7 text-right subtotal">$ <span id="summary-sub-total-{{ tag }}"></span></th>
-                        <th class="col-8 text-right tax">$ <span id="summary-tax-total-{{ tag }}"></span></th>
-                        <th class="col-9 text-right total">$ <span id="summary-grand-total-{{ tag }}"></span></th>
+                        <th class="col-7 text-right subtotal"><span id="summary-sub-total-{{ tag }}"></span></th>
+                        <th class="col-8 text-right tax"><span id="summary-tax-total-{{ tag }}"></span></th>
+                        <th class="col-9 text-right total"><span id="summary-grand-total-{{ tag }}"></span></th>
                     </tr>
                     {% for post in site.tags[tag] %} 
                         <tr class="table-invoice-item client client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }} {% if post.title == "template" %} hide-template-file {% endif %}">
@@ -52,9 +52,9 @@ layout: default
                             <td class="col-4 title"><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></td>
                             <td class="col-5 text-right invoice"><a onclick="printPage('{{ post.url | prepend: site.baseurl }}');">{{ post.project-id }}-{{ post.date | date: "%m%d%y"}}</a></td>
                             <td class="col-6 text-right rph"><span id="rph-{{ post.project-id }}"></span></td>
-                            <td class="col-7 text-right subtotal">$<span id="sub-total-{{ post.project-id }}"></span></td>
-                            <td class="col-8 text-right tax">{% if post.tax %}${% else %}-{% endif %}<span id="tax-total-{{ post.project-id }}"></span></td>
-                            <td class="col-9 text-right total">$<span id="grand-total-{{ post.project-id }}"></span></td>
+                            <td class="col-7 text-right subtotal">{%if post.revenue == null %} - {% endif %}<span id="sub-total-{{ post.project-id }}"></span></td>
+                            <td class="col-8 text-right tax">{%if post.tax == null %} - {% endif %}<span id="tax-total-{{ post.project-id }}"></span></td>
+                            <td class="col-9 text-right total">{%if post.revenue == null %} - {% endif %}<span id="grand-total-{{ post.project-id }}"></span></td>
                         </tr>
                     {% endfor %}
                 {% endfor %}
@@ -69,26 +69,21 @@ layout: default
 
                 var revenue_per_hour =
                     {% if post.revenue and post.hours %}
-                        ( ({{ post.revenue }}) / ({{ post.hours }}) + 0);
+                        ( (({{ post.revenue }})/({{ post.hours }})/100) );
                     {% else %}
-                         "n/a";
+                         "-";
                     {% endif %}
 
                 // HTML Insert
-                document.getElementById('rph-{{ post.project-id }}').innerHTML = revenue_per_hour.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});
+                document.getElementById('rph-{{ post.project-id }}').innerHTML = revenue_per_hour.toLocaleString('USD',{minimumFractionDigits: 1, maximumFractionDigits: 1});
 
             </script>
             <script>
                 //  Table Project Totals (with or without tax)
                 //  
                 // Logic
-                var estimateTotal = 
-                    {% if post.revenue %}
-                        {{ post.revenue }} + 
-                    {% else %} 
-                        {{ post.estimate-total }} +
-                    {% endif %} 0 
-                ;
+                var estimateTotal = {{ post.revenue }} + 0;
+    
                 var tax = {% if post.tax %} + {{ post.tax }} {% else %} 0 {% endif %};
 
                 // Values
@@ -97,9 +92,9 @@ layout: default
                 var grand_total = ( sub_total * (1 + tax) );
 
                 // HTML Insert
-                document.getElementById('sub-total-{{ post.project-id }}').innerHTML = sub_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});
-                {% if post.tax %}document.getElementById('tax-total-{{ post.project-id }}').innerHTML = tax_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});{% endif %}
-                document.getElementById('grand-total-{{ post.project-id }}').innerHTML = grand_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});
+                {% if post.revenue %}   document.getElementById('sub-total-{{ post.project-id }}').innerHTML = sub_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});{% endif %}
+                {% if post.tax %}       document.getElementById('tax-total-{{ post.project-id }}').innerHTML = tax_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});{% endif %}
+                {% if post.revenue %}   document.getElementById('grand-total-{{ post.project-id }}').innerHTML = grand_total.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});{% endif %}
             </script>
         {% endfor %}
     {% endfor %}
