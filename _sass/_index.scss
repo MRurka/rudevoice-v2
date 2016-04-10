@@ -1,15 +1,17 @@
 
-$col-1: 8%;
-$col-2: 8%;
-$col-3: 20%;
-$col-4: 14%;
-$col-5: 10%;
-$col-6: 10%;
-$col-7: 10%;
+$col-1: 4%;		// date
+$col-2: 8%;		// client
+$col-3: 16%;	// project desc
+$col-4: 10%;	// invoice #
+$col-5: 5%; 	// rph
+$col-6: 8%;		// subtotal
+$col-7: 8%;		// tax
+$col-8: 8%;		// total
 
 // Table Format
 .index-template {
 	table {
+		text-align: left;
 		.col-1 {
 			width: $col-1;
 		}
@@ -29,6 +31,9 @@ $col-7: 10%;
 			width: $col-6;
 		}
 		.col-7 {
+			width: $col-7;
+		}
+		.col-8 {
 			width: $col-7;
 		}
 		.text-right {

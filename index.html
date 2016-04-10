@@ -19,9 +19,10 @@ layout: default
                     <th class="col-2">Client</th>
                     <th class="col-3">Work</th>
                     <th class="col-4 text-right">Invoice #</th>
-                    <th class="col-5 text-right">Subtotal</th>
-                    <th class="col-6 text-right">Tax</th>
-                    <th class="col-7 text-right">Total</th>
+                    <th class="col-5 text-right">RpH</th>
+                    <th class="col-6 text-right">Subtotal</th>
+                    <th class="col-7 text-right">Tax</th>
+                    <th class="col-8 text-right">Total</th>
                 </tr>
             </table>
         </div>
@@ -35,20 +36,22 @@ layout: default
                         <th class="col-1 date" style="text-align:left">{{ tag }}</th>
                         <th class="col-2 client"></th>
                         <th class="col-3 title"></th>
-                        <th class="col-4 invoice text-right"></th>
-                        <th class="col-5 subtotal text-right">$ <span id="summary-sub-total-{{ tag }}"></span></th>
-                        <th class="col-6 tax text-right">$ <span id="summary-tax-total-{{ tag }}"></span></th>
-                        <th class="col-7 total text-right">$ <span id="summary-grand-total-{{ tag }}"></span></th>
+                        <th class="col-4 text-right invoice"></th>
+                        <th class="col-5 text-right rph"></th>
+                        <th class="col-6 text-right subtotal">$ <span id="summary-sub-total-{{ tag }}"></span></th>
+                        <th class="col-7 text-right tax">$ <span id="summary-tax-total-{{ tag }}"></span></th>
+                        <th class="col-8 text-right total">$ <span id="summary-grand-total-{{ tag }}"></span></th>
                     </tr>
                     {% for post in site.tags[tag] %} 
                         <tr class="table-invoice-item client client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }} {% if post.title == "template" %} hide-template-file {% endif %}">
-                            <td class="col-1 date">{{ post.date | date: "%m/%d/%Y" }}</td>
+                            <td class="col-1 date">{{ post.date | date: "%m/%d" }}</td>
                             <td class="col-2 client"><a class="client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}">{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.name }}</a></td>
                             <td class="col-3 title"><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></td>
-                            <td class="col-4 invoice text-right"><a onclick="printPage('{{ post.url | prepend: site.baseurl }}');">{{ post.project-id }}-{{ post.date | date: "%m%d%y"}}</a></td>
-                            <td class="col-5 subtotal text-right">$<span id="sub-total-{{ post.project-id }}"></span></td>
-                            <td class="col-6 tax text-right">{% if post.tax %}${% else %}-{% endif %}<span id="tax-total-{{ post.project-id }}"></span></td>
-                            <td class="col-7 total text-right">$<span id="grand-total-{{ post.project-id }}"></span></td>
+                            <td class="col-4 text-right invoice"><a onclick="printPage('{{ post.url | prepend: site.baseurl }}');">{{ post.project-id }}-{{ post.date | date: "%m%d%y"}}</a></td>
+                            <td class="col-5 text-right rph"><span id="rph-{{ post.project-id }}"></span></td>
+                            <td class="col-6 text-right subtotal">$<span id="sub-total-{{ post.project-id }}"></span></td>
+                            <td class="col-7 text-right tax">{% if post.tax %}${% else %}-{% endif %}<span id="tax-total-{{ post.project-id }}"></span></td>
+                            <td class="col-8 text-right total">$<span id="grand-total-{{ post.project-id }}"></span></td>
                         </tr>
                     {% endfor %}
                 {% endfor %}
@@ -59,10 +62,26 @@ layout: default
     {% for tag in sortedtags %}
         {% for post in site.tags[tag] %}
             <script>
+                // Revenue Per Hour
+
+                var revenue_per_hour =
+                    {% if post.revenue and post.hours %}
+                        ( ({{ post.revenue }}) / ({{ post.hours }}) + 0);
+                    {% else %}
+                         "n/a";
+                    {% endif %}
+
+                // HTML Insert
+                document.getElementById('rph-{{ post.project-id }}').innerHTML = revenue_per_hour.toLocaleString('USD',{minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            </script>
+            <script>
+                //  Table Project Totals (with or without tax)
+                //  
                 // Logic
                 var estimateTotal = 
-                    {% if post.amount-received %}
-                        {{ post.amount-received }} + 
+                    {% if post.revenue %}
+                        {{ post.revenue }} + 
                     {% else %} 
                         {{ post.estimate-total }} +
                     {% endif %} 0 
@@ -84,22 +103,24 @@ layout: default
 
     {% for tag in sortedtags %}
         <script>
+            // Header Summary Totals (All)
             // Logic
             var summary_sub_total = 
             {% for post in site.tags[tag] %}
-                {% if post.amount-received %}
-                    {{ post.amount-received }} +
+                {% if post.revenue %}
+                    {{ post.revenue }} +
                 {% else %}
                     {{ post.estimate-total }} + 
                 {% endif %}
-            {% endfor %} 0
+            {% endfor %} 0;
 
-            // Values
-            var summary_tax_total =  ( (
+            // Values 
+            var summary_tax_total =  ( 
+                (
                     {% for post in site.tags[tag] %}
                         {% if post.tax %}
-                            {% if post.amount-received %}
-                                {{ post.amount-received }} +
+                            {% if post.revenue %}
+                                {{ post.revenue }} +
                             {% else %}
                                 {{ post.estimate-total }} + 
                             {% endif %}
@@ -110,11 +131,11 @@ layout: default
             var summary_grand_total = (
                 {% for post in site.tags[tag] %}
                     {% if post.tax %}
-                        ( {{ post.amount-received }} * (1 + {{ 0.13 }}) ) +
+                        ( {{ post.revenue }} * (1 + {{ 0.13 }}) ) +
                     {% else %}
-                        {{ post.amount-received }} +
+                        {{ post.revenue }} +
                     {% endif %} 
-                {% endfor %} 0 
+                {% endfor %} 0
             );
 
             // HTML Insert
@@ -126,7 +147,7 @@ layout: default
 
 </div>
 <script>
-// Toggle Clients
+    // Toggle Clients
     {% for tag in sortedtags %}
         {% for post in site.tags[tag] %} 
             $('.table-body-container table td a.client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}').click(function(){
