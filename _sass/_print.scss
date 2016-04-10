@@ -33,8 +33,8 @@ body {
 .subpage {
     height: 257mm;
     position: relative;
-    p {
-        color:#555 !important;
+    p, ul {
+        color: $print-page-text-color !important;
         font-weight: 400;
     }
 }

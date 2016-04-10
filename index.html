@@ -15,13 +15,13 @@ layout: default
         <div class="container">
             <table>
                 <tr>
-                    <th width="10%">Date</th>
-                    <th width="10%">Client</th>
-                    <th width="26%">Work</th>
-                    <th width="14%" class="text-right">Invoice #</th>
-                    <th width="10%" class="text-right">Subtotal</th>
-                    <th width="10%" class="text-right">Tax</th>
-                    <th width="10%" class="text-right">Total</th>
+                    <th class="col-1">Date</th>
+                    <th class="col-2">Client</th>
+                    <th class="col-3">Work</th>
+                    <th class="col-4 text-right">Invoice #</th>
+                    <th class="col-5 text-right">Subtotal</th>
+                    <th class="col-6 text-right">Tax</th>
+                    <th class="col-7 text-right">Total</th>
                 </tr>
             </table>
         </div>
@@ -32,23 +32,23 @@ layout: default
             <table>
                 {% for tag in sortedtags %}
                     <tr class="table-summary-header">
-                        <th class="date" width="10%" style="text-align:left">{{ tag }}</th>
-                        <th class="client" width="10%"></th>
-                        <th class="title" width="26%"></th>
-                        <th class="invoice text-right" width="14%"></th>
-                        <th class="subtotal text-right" width="10%">$ <span id="summary-sub-total-{{ tag }}"></span></th>
-                        <th class="tax text-right" width="10%">$ <span id="summary-tax-total-{{ tag }}"></span></th>
-                        <th class="total text-right" width="10%">$ <span id="summary-grand-total-{{ tag }}"></span></th>
+                        <th class="col-1 date" style="text-align:left">{{ tag }}</th>
+                        <th class="col-2 client"></th>
+                        <th class="col-3 title"></th>
+                        <th class="col-4 invoice text-right"></th>
+                        <th class="col-5 subtotal text-right">$ <span id="summary-sub-total-{{ tag }}"></span></th>
+                        <th class="col-6 tax text-right">$ <span id="summary-tax-total-{{ tag }}"></span></th>
+                        <th class="col-7 total text-right">$ <span id="summary-grand-total-{{ tag }}"></span></th>
                     </tr>
                     {% for post in site.tags[tag] %} 
                         <tr class="table-invoice-item client client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }} {% if post.title == "template" %} hide-template-file {% endif %}">
-                            <td class="date" width="10%">{{ post.date | date: "%b %-d, %Y" }}</td>
-                            <td class="client" width="10%"><a class="client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}">{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.name }}</a></td>
-                            <td class="title" width="26%"><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></td>
-                            <td class="invoice text-right" width="14%"><a onclick="printPage('{{ post.url | prepend: site.baseurl }}');">{{ post.project-id }}-{{ post.date | date: "%m%d%y"}}</a></td>
-                            <td class="subtotal text-right" width="10%">$<span id="sub-total-{{ post.project-id }}"></span></td>
-                            <td class="tax text-right" width="10%">{% if post.tax %}${% else %}-{% endif %}<span id="tax-total-{{ post.project-id }}"></span></td>
-                            <td class="total text-right" width="10%">$<span id="grand-total-{{ post.project-id }}"></span></td>
+                            <td class="col-1 date">{{ post.date | date: "%m/%d/%Y" }}</td>
+                            <td class="col-2 client"><a class="client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}">{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.name }}</a></td>
+                            <td class="col-3 title"><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></td>
+                            <td class="col-4 invoice text-right"><a onclick="printPage('{{ post.url | prepend: site.baseurl }}');">{{ post.project-id }}-{{ post.date | date: "%m%d%y"}}</a></td>
+                            <td class="col-5 subtotal text-right">$<span id="sub-total-{{ post.project-id }}"></span></td>
+                            <td class="col-6 tax text-right">{% if post.tax %}${% else %}-{% endif %}<span id="tax-total-{{ post.project-id }}"></span></td>
+                            <td class="col-7 total text-right">$<span id="grand-total-{{ post.project-id }}"></span></td>
                         </tr>
                     {% endfor %}
                 {% endfor %}
@@ -124,23 +124,16 @@ layout: default
         </script>
     {% endfor %} 
 
-
 </div>
 <script>
 // Toggle Clients
     {% for tag in sortedtags %}
         {% for post in site.tags[tag] %} 
-
             $('.table-body-container table td a.client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}').click(function(){
                 $('.table-body-container table tr.client').hide();
                 $('.table-body-container table tr.client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}').show();
                 $('.table-body-container table td a.client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}').addClass('active');
             });
-
-            // $('.table-body table td a.client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}.active').click(function(){
-            //     $('.table-body table tr.client').show();
-            // });
-
         {% endfor %}
     {% endfor %}
 </script>

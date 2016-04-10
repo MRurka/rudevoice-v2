@@ -1,14 +1,46 @@
 
-.index-template {
-	padding:0 0 5em 0;
+$col-1: 8%;
+$col-2: 8%;
+$col-3: 20%;
+$col-4: 14%;
+$col-5: 10%;
+$col-6: 10%;
+$col-7: 10%;
 
-	// Text Alignment
-	th, td {
-		text-align: left;
-		&.text-right {
+// Table Format
+.index-template {
+	table {
+		.col-1 {
+			width: $col-1;
+		}
+		.col-2 {
+			width: $col-2;
+		}
+		.col-3 {
+			width: $col-3;
+		}
+		.col-4 {
+			width: $col-4;
+		}
+		.col-5 {
+			width: $col-5;
+		}
+		.col-6 {
+			width: $col-6;
+		}
+		.col-7 {
+			width: $col-7;
+		}
+		.text-right {
 			text-align: right;
 		}
 	}
+}
+
+// Table Styles
+.index-template {
+	padding:0 0 5em 0;
+
 	// Table Labels
 	.table-header-container {
 		width: 100%;
@@ -24,7 +56,7 @@
 			color: $index-table-header-color;
 		}
 	}
-	// Table Summary
+	// Table Summary Header
 	tr.table-summary-header {
 		padding: 0 0 1.5em 0;
 		border-bottom:2px solid $index-table-border-color;

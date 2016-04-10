@@ -216,26 +216,27 @@
 		float:left;
 	}
 
-	// div#win {
-	// 	font-size: .8em;
-	// 	text-align: right;
-	// 	line-height: 1.6em;
-	// 	color: $print-page-accent-color;
-	// 	font-weight: 300;
-	// 	margin: 100px 0 0 0;
-	// 	position: absolute;
-	// 	right: 30px;
-	// 	letter-spacing: .5px;
-	// }
-	// div#win:before {
-	//     content: "";
-	//     position: absolute;
-	//     height: 116px;
-	//     top: -82px;
-	//     width: 7px;
-	//     background: $print-page-accent-color;
-	//     right: -28px;
-	// }
+	// This is where the client address appears on the invoice
+	div#win {
+		font-size: .9em;
+		text-align: right;
+		line-height: 1.6em;
+		color: $print-page-accent-color;
+		font-weight: 400;
+		margin: 100px 0 0 0;
+		position: absolute;
+		right: 30px;
+		letter-spacing: 0;
+	}
+	div#win:before {
+	    content: "";
+	    position: absolute;
+	    height: 116px;
+	    top: -82px;
+	    width: 7px;
+	    background: $print-page-accent-color;
+	    right: -28px;
+	}
 	
     .right-col {
     	float:right;
@@ -272,6 +273,8 @@
 .signature-section {
 	margin:50px 0 0 0;
 	font-size: .8em;
+	font-weight: 400;
+	color:#333;
 	div {
 		margin:0 0 50px 0;
 	}
@@ -309,7 +312,8 @@
 		font-size: 1em;
 	    margin: 35px 0 0 0;
 	    line-height: 1.7em;
-	    font-weight: 300;
+        font-weight: 400;
+	    color: #777;
 
 	    span {
 		    display: block;
@@ -328,7 +332,8 @@
 
 	span.date {
 		display: block;
-		font-weight:200;
+		font-weight: 400;
+	    color: #777;
 		margin:10px 0 0 0;
 	}
 
@@ -359,7 +364,7 @@
 	}
 	ul {
 		line-height: 1.6em;
-		padding: 0 0 0 24px;
+		padding: 0 0 0 17px;
 		font-size: .8em;
 
 		li {
