@@ -46,15 +46,15 @@ layout: default
                     </tr>
                     {% for post in site.tags[tag] %} 
                         <tr class="table-invoice-item client client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }} {% if post.title == "template" %} hide-template-file {% endif %}">
-                            <td class="col-1 date-start">{% if post.date %} {{ post.date | date: "%m/%d" }} {% else %} - {% endif %}</td>
-                            <td class="col-2 date-end">{% if post.date-end %} {{ post.date-end | date: "%m/%d" }} {% else %} - {% endif %}</td>
+                            <td class="col-1 date-start">{% if post.date %} {{ post.date | date: "%m/%d" }} {% else %} &#149; {% endif %}</td>
+                            <td class="col-2 date-end">{% if post.date-end %} {{ post.date-end | date: "%m/%d" }} {% else %} &#149; {% endif %}</td>
                             <td class="col-3 client"><a class="client-{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.username }}">{% assign client-id = site.data.clients[post.client-id] %}{{ client-id.name }}</a></td>
                             <td class="col-4 title"><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></td>
                             <td class="col-5 text-right invoice"><a onclick="printPage('{{ post.url | prepend: site.baseurl }}');">{{ post.project-id }}-{{ post.date | date: "%m%d%y"}}</a></td>
                             <td class="col-6 text-right rph"><span id="rph-{{ post.project-id }}"></span></td>
-                            <td class="col-7 text-right subtotal">{%if post.revenue == null %} - {% endif %}<span id="sub-total-{{ post.project-id }}"></span></td>
-                            <td class="col-8 text-right tax">{%if post.tax == null or post.revenue == null %} - {% endif %}<span id="tax-total-{{ post.project-id }}"></span></td>
-                            <td class="col-9 text-right total">{%if post.revenue == null %} - {% endif %}<span id="grand-total-{{ post.project-id }}"></span></td>
+                            <td class="col-7 text-right subtotal">{%if post.revenue == null %} &#149; {% endif %}<span id="sub-total-{{ post.project-id }}"></span></td>
+                            <td class="col-8 text-right tax">{%if post.tax == null or post.revenue == null %} &#149; {% endif %}<span id="tax-total-{{ post.project-id }}"></span></td>
+                            <td class="col-9 text-right total">{%if post.revenue == null %} &#149; {% endif %}<span id="grand-total-{{ post.project-id }}"></span></td>
                         </tr>
                     {% endfor %}
                 {% endfor %}
@@ -71,7 +71,7 @@ layout: default
                     {% if post.revenue and post.hours %}
                         ( (({{ post.revenue }})/({{ post.hours }})/100) );
                     {% else %}
-                         "-";
+                         "&#149;";
                     {% endif %}
 
                 // HTML Insert
